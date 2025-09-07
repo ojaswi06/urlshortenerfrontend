@@ -5,15 +5,15 @@ const shortUrlLink = document.getElementById("shortUrl");
 const copyBtn = document.getElementById("copyBtn");
 const dashboardBtn = document.getElementById("dashboardBtn");
 
-// ✅ Use Render backend URL
+// Use Render backend URL
 const backendURL = "https://urlshortenerbackend-4yhm.onrender.com";
 
-// Function to validate URL
+// Validate URL
 function isValidUrl(url) {
   try {
     new URL(url);
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 }
@@ -36,7 +36,6 @@ shortenBtn.addEventListener("click", async () => {
     if (!res.ok) throw new Error("Failed to shorten URL");
 
     const data = await res.json();
-
     shortUrlLink.href = data.shortUrl;
     shortUrlLink.textContent = data.shortUrl;
     resultBox.style.display = "block";
