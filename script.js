@@ -6,7 +6,7 @@ const copyBtn = document.getElementById("copyBtn");
 const dashboardBtn = document.getElementById("dashboardBtn");
 
 // 🔹 Replace this with your Render backend URL
-const backendURL = "https://urlshortenerbackend.onrender.com";
+const backendURL = "https://urlshortenerbackend-4yhm.onrender.com";
 
 shortenBtn.addEventListener("click", async () => {
   const longUrl = longUrlInput.value.trim();
