@@ -5,12 +5,26 @@ const shortUrlLink = document.getElementById("shortUrl");
 const copyBtn = document.getElementById("copyBtn");
 const dashboardBtn = document.getElementById("dashboardBtn");
 
-// 🔹 Replace this with your deployed Render backend URL
+// ✅ Use Render backend URL
 const backendURL = "https://urlshortenerbackend-4yhm.onrender.com";
+
+// Function to validate URL
+function isValidUrl(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
 
 shortenBtn.addEventListener("click", async () => {
   const longUrl = longUrlInput.value.trim();
   if (!longUrl) return alert("Please enter a URL!");
+  if (!isValidUrl(longUrl)) return alert("Please enter a valid URL!");
+
+  shortenBtn.disabled = true;
+  shortenBtn.textContent = "Shortening...";
 
   try {
     const res = await fetch(`${backendURL}/shorten`, {
@@ -18,24 +32,33 @@ shortenBtn.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl })
     });
+
+    if (!res.ok) throw new Error("Failed to shorten URL");
+
     const data = await res.json();
 
-    // Full backend link for redirect
     shortUrlLink.href = data.shortUrl;
     shortUrlLink.textContent = data.shortUrl;
     resultBox.style.display = "block";
+
   } catch (err) {
-    alert("Error connecting to backend. Make sure backend is deployed!");
     console.error(err);
+    alert("Error connecting to backend. Make sure backend is deployed!");
+  } finally {
+    shortenBtn.disabled = false;
+    shortenBtn.textContent = "Shorten";
   }
 });
 
 copyBtn.addEventListener("click", () => {
-  navigator.clipboard.writeText(shortUrlLink.textContent);
-  alert("Copied to clipboard!");
+  if (shortUrlLink.textContent) {
+    navigator.clipboard.writeText(shortUrlLink.textContent);
+    alert("Copied to clipboard!");
+  }
 });
 
 dashboardBtn.addEventListener("click", () => {
+  if (!shortUrlLink.textContent) return;
   const shortId = shortUrlLink.textContent.split("/").pop();
-  window.location.href = `${backendURL}/dashboard.html?shortId=${shortId}`;
+  window.location.href = `dashboard.html?shortId=${shortId}`;
 });
