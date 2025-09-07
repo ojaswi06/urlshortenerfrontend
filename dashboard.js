@@ -1,7 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const shortId = urlParams.get("shortId");
 
-// ✅ Render backend URL
 const backendURL = "https://urlshortenerbackend-4yhm.onrender.com";
 
 const totalClicksEl = document.getElementById("totalClicks");
@@ -59,6 +58,6 @@ async function fetchAnalytics() {
   }
 }
 
-// Fetch analytics immediately and every 5 seconds
+// Initial fetch and every 5 seconds
 fetchAnalytics();
 setInterval(fetchAnalytics, 5000);
